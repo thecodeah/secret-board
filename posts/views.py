@@ -17,6 +17,7 @@ class FeedView(generic.ListView):
 def post(request):
     if request.method == "POST":
         post = Post()
+        post.author = request.user
         post.content = request.POST["content"]
         post.pub_date = datetime.datetime.now()
         post.save()
