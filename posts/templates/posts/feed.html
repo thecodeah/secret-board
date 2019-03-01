@@ -6,7 +6,7 @@
     <form action="{% url "posts:post" %}" method="POST">
         {% csrf_token %}
         <label>Logged in as {{ user }}</label>
-        <textarea name="content" id="content" cols="80" maxlength="280"></textarea>
+        <textarea name="content" id="content" cols="80" maxlength="280" required></textarea>
         <input type="submit" value="Post!">
     </form>
 </div>
