@@ -6,8 +6,11 @@
 
     <body>
         <center style="margin:50px;">
-            {% block content %}
-            {% endblock %}
+            {% block content %}{% endblock %}
         </center>
+
+        <!-- Temporary -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        {% block extra-scripts %}{% endblock %}
     </body>
 </html>

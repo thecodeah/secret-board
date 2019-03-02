@@ -11,3 +11,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.content
+
+class Like(models.Model):
+    post = models.ForeignKey(Post, models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)

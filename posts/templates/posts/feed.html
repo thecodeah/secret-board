@@ -1,7 +1,15 @@
 {% extends "posts/base.html" %}
 
-{% block content %}
+{% block extra-scripts %}
+{% load static %}
+<script>
+    csrf_token = "{{ csrf_token }}"
+    post_url = "{% url "posts:like" %}"
+</script>
+<script type="text/javascript" src="{% static "posts/like.js" %}"></script>
+{% endblock %}
 
+{% block content %}
 <div style="width:600px; min-height:50px; border:3px solid black; padding:10px; margin-bottom:20px;">
     <form action="{% url "posts:post" %}" method="POST">
         {% csrf_token %}
@@ -16,7 +24,7 @@
     <p align="left">{{ post.content }}</p>
 </div>
 <div style="width:600px; border:3px solid black; padding:10px; margin-bottom:10px;">
-    <button style="float:left;">Like ({{ post.likes }})</button>
+    <input type="button" class="js-actionLike" name="like-{{ post.id }}" style="float:left;" value="Like ({{ post.like_set.all.count }})">
     <a style="float:right;">{{ post.views }} views</a>
     <div style="clear:both;"></div>
 </div>
