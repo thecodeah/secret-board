@@ -10,10 +10,16 @@ $(document).ready(function() {
             },
             dataType: "json",
             success: function(response) {
-                $(this).prop("value", `Like (${response.like_count})`)
+                if(response.liked) {
+                    $(this).prop("value", `Unlike`);
+                } else {
+                    $(this).prop("value", `Like`);
+                }
+
+                $(this).siblings(".js-likeCount").text(response.like_count);
             },
             error: function(response, err) {
-                alert("Woopsy daisy!");
+                alert("Whoopsy daisy! Something went wrong! Try again later...");
             }
         });
     });

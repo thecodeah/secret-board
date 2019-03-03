@@ -1,14 +1,14 @@
 import datetime
 import json
 
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, get_object_or_404
 from django.views import generic
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 
-from .models import Post, Like
+from .models import Post
 from .forms import PostForm
 
 class FeedView(generic.ListView):
@@ -34,10 +34,14 @@ def post(request):
 @login_required
 @require_POST
 def like(request):
-    post = Post.objects.get(pk = request.POST["post_id"])
-    new_like, created = Like.objects.get_or_create(user = request.user, post = post)
-    if not created:
-        new_like.delete()
+    user = request.user
+    post = get_object_or_404(Post, pk = request.POST["post_id"])
+    liked = post.likes.filter(id = user.id).exists()
+
+    if liked:
+        post.likes.remove(user)
+    else:
+        post.likes.add(user)
     
-    response = {"like_count": post.like_set.all().count()}
+    response = {"like_count": post.likes.count(), "liked": not liked}
     return HttpResponse(json.dumps(response), content_type = "application/json")

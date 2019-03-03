@@ -24,7 +24,12 @@
     <p align="left">{{ post.content }}</p>
 </div>
 <div style="width:600px; border:3px solid black; padding:10px; margin-bottom:10px;">
-    <input type="button" class="js-actionLike" name="like-{{ post.id }}" style="float:left;" value="Like ({{ post.like_set.all.count }})">
+    <div style="float:left;">
+        {% load post_extras %}
+        {% post_liked post user.id as liked %}
+        <input type="button" class="js-actionLike" name="like-{{ post.id }}" value="{{ liked|yesno:"Unlike,Like" }}">
+        <span class="js-likeCount">{{ post.likes.count }}</span>
+    </div>
     <a style="float:right;">{{ post.views }} views</a>
     <div style="clear:both;"></div>
 </div>
