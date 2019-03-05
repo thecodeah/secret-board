@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $(".js-actionLike").click(function(){
+    $("#feedPosts").on("click", ".js-actionLike", function(){
         $.ajax({
             context: this,
             type: "POST",

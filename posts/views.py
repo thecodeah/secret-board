@@ -8,12 +8,16 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 
+from el_pagination.views import AjaxListView
+
 from .models import Post
 from .forms import PostForm
 
-class FeedView(generic.ListView):
+class FeedView(AjaxListView):
     model = Post
+    context_object_name = "entry_list"
     template_name = "posts/feed.html"
+    page_template = "posts/feed_posts.html"
 
     def get_queryset(self):
         queryset = super().get_queryset()

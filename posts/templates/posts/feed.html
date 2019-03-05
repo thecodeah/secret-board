@@ -1,37 +1,30 @@
 {% extends "posts/base.html" %}
 
 {% block extra-scripts %}
-{% load static %}
-<script>
-    csrf_token = "{{ csrf_token }}"
-    post_url = "{% url "posts:like" %}"
-</script>
-<script type="text/javascript" src="{% static "posts/js/like.js" %}"></script>
+    {% load static %}
+
+    <script src="{% static "el-pagination/js/el-pagination.js" %}"></script>
+    <script>
+        $.endlessPaginate({paginateOnScroll: true});
+    </script>
+    <script>
+        csrf_token = "{{ csrf_token }}"
+        post_url = "{% url "posts:like" %}"
+    </script>
+    <script type="text/javascript" src="{% static "posts/js/like.js" %}"></script>
 {% endblock %}
 
 {% block content %}
-<div style="width:600px; min-height:50px; border:3px solid black; padding:10px; margin-bottom:20px;">
-    <form action="{% url "posts:post" %}" method="POST">
-        {% csrf_token %}
-        <label>Logged in as {{ user }}</label>
-        <textarea name="content" id="content" cols="80" maxlength="280" required></textarea>
-        <input type="submit" value="Post!">
-    </form>
-</div>
-
-{% for post in object_list %}
-<div style="width:600px; min-height:50px; border:3px solid black; padding:10px; border-bottom:0px;">
-    <p align="left">{{ post.content }}</p>
-</div>
-<div style="width:600px; border:3px solid black; padding:10px; margin-bottom:10px;">
-    <div style="float:left;">
-        {% load post_extras %}
-        {% post_liked post user.id as liked %}
-        <input type="button" class="js-actionLike" name="like-{{ post.id }}" value="{{ liked|yesno:"Unlike,Like" }}">
-        <span class="js-likeCount">{{ post.likes.count }}</span>
+    <div style="width:600px; min-height:50px; border:3px solid black; padding:10px;">
+        <form action="{% url "posts:post" %}" method="POST">
+            {% csrf_token %}
+            <label>Logged in as {{ user }}</label>
+            <textarea name="content" id="content" cols="80" maxlength="280" required></textarea>
+            <input type="submit" value="Post!">
+        </form>
     </div>
-    <a style="float:right;">{{ post.views }} views</a>
-    <div style="clear:both;"></div>
-</div>
-{% endfor %}
+
+    <div id="feedPosts" style="margin:20px;">
+        {% include "posts/feed_posts.html" %}
+    </div>
 {% endblock %}
