@@ -13,7 +13,6 @@ class Post(models.Model):
     board = models.ForeignKey(Board, models.SET_NULL, null = True)
     pub_date = models.DateTimeField()
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name = "likes")
-    views = models.IntegerField(default = 0)
     approved = models.BooleanField(default = False)
 
     def __str__(self):

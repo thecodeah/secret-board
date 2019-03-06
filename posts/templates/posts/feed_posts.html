@@ -12,7 +12,6 @@
             <input type="button" class="js-actionLike" name="like-{{ post.id }}" value="{{ liked|yesno:"Unlike,Like" }}">
             <span class="js-likeCount">{{ post.likes.count }}</span>
         </div>
-        <a style="float:right;">{{ post.views }} views</a>
         <div style="clear:both;"></div>
     </div>
 {% endfor %}
