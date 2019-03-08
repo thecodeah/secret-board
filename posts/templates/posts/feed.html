@@ -1,7 +1,6 @@
 {% extends "posts/base.html" %}
 {% block extra-scripts %}
     {% load static %}
-
     <script src="{% static "el-pagination/js/el-pagination.js" %}"></script>
     <script>
         $.endlessPaginate({paginateOnScroll: true});
@@ -14,38 +13,39 @@
 {% endblock %}
 
 {% block content %}
-    {% comment %} Yes, I am aware that the CSS here is horrible. This is only temporary {% endcomment %}
-    {% comment %} I'm trying not to focus too much on the CSS/Design at the moment {% endcomment %}
-    <div name="main-column" style="width:1000px;">
-        <div name="column-left" style="float:left; width:300px;">
-            <div style="width:300px; min-height:50px; border:3px solid black; padding:10px; text-align:left;">
-                <h2>Boards</h2>
-                <ul>
-                    <a href="{% url "posts:main_feed" %}"><li>#main</li></a>
-                    {% for b in board_list %}
-                    <a href="{% url "posts:feed" b %}"><li>#{{ b }}</li></a>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-
-        <div name="column-right" style="float:right; width:700px;">
-            <div style="width:600px; min-height:50px; border:3px solid black; padding:10px;">
-                <form action="{% url "posts:post" board %}" method="POST">
-                    {% csrf_token %}
-                    {% if board %}
-                    <textarea name="content" id="content" cols="80" maxlength="280" required></textarea>
-                    <input type="submit" value="Post!">
-                    {% else %}
-                    <textarea name="content" id="content" cols="80" maxlength="280" placeholder="You have to be on a board in order to post!" readonly required></textarea>
-                    <input type="button" value="Post!">
-                    {% endif %}
-                </form>
+        <div class="row py-5">
+            <div class="col-sm-4">
+                <div class="card mb-3">
+                    <div class="card-header">Boards</div>
+                    <div class="card-body">
+                        <ul>
+                            <a href="{% url "posts:main_feed" %}"><li>#main</li></a>
+                            {% for b in board_list %}
+                            <a href="{% url "posts:feed" b %}"><li>#{{ b }}</li></a>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
 
-            <div id="feedPosts" style="margin:20px;">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{% url "posts:post" board %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {% if board %}
+                                    <textarea name="content" class="form-control" id="content" maxlength="280" required></textarea>
+                                {% else %}
+                                    <textarea name="content" class="form-control" id="content" maxlength="280" placeholder="You have to be on a board in order to post!" readonly required></textarea>
+                                {% endif %}
+                            </div>
+                            <button type="{{ board|yesno:"submit,button" }}" class="btn btn-primary btn-sm float-right">Post!</button>
+                        </form>
+                    </div>
+                </div>
+
                 {% include "posts/feed_posts.html" %}
             </div>
         </div>
-    </div>
 {% endblock %}
