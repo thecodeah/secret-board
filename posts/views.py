@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
+from django.contrib import messages
 
 from el_pagination.views import AjaxListView
 
@@ -53,6 +54,8 @@ def post(request, slug):
         post.board = board
         post.pub_date = timezone.now()
         post.save()
+
+        messages.add_message(request, messages.SUCCESS, "Your secret has been posted and is awaiting approval!")
 
     return HttpResponseRedirect(reverse("posts:feed", args = (slug,)))
 
