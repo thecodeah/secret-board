@@ -9,8 +9,10 @@
         <div class="card-footer">
             {% load post_extras %}
             {% post_liked post user.id as liked %}
-            <input type="button" class="js-actionLike btn btn-outline-primary btn-sm" name="like-{{ post.id }}" value="{{ liked|yesno:"Unlike,Like" }}"/>
-            <span class="js-likeCount">{{ post.likes.count }}</span>
+            <button name="like-{{ post.id }}" class="js-actionLike btn btn-primary-outline btn-sm">
+                <i class="{{ liked|yesno:"fas,far" }} fa-heart {{ liked|yesno:"text-danger,text-muted" }} mr-1"></i>
+                <span class="js-likeCount text-secondary">{{ post.likes.count }}</span>
+            </button>
         </div>
     </div>
 {% endfor %}

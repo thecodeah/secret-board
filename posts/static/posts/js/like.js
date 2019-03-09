@@ -10,13 +10,23 @@ $(document).ready(function() {
             },
             dataType: "json",
             success: function(response) {
-                if(response.liked) {
-                    $(this).prop("value", `Unlike`);
+                heart = $(this).children(".fa-heart")
+                
+                // Toggle heart solid and light state
+                if(heart.hasClass("far")) {
+                    heart.addClass('fas').removeClass('far');
                 } else {
-                    $(this).prop("value", `Like`);
+                    heart.addClass('far').removeClass('fas');
                 }
 
-                $(this).siblings(".js-likeCount").text(response.like_count);
+                // Toggle heart color
+                if(heart.hasClass("text-danger")) {
+                    heart.addClass('text-muted').removeClass('text-danger');
+                } else {
+                    heart.addClass('text-danger').removeClass('text-muted');
+                }
+
+                $(this).children(".js-likeCount").text(response.like_count);
             },
             error: function(response, err) {
                 alert("Whoopsy daisy! Something went wrong! Try again later...");
