@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'z3#ctoanix&r*qf%%kp_jcsjs%uc&0&zmg8$(e1l+5@yvch-5f'
+SECRET_KEY = os.getenv("SB_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -79,12 +79,12 @@ WSGI_APPLICATION = 'secretboard.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'secretboard',
-        'USER': 'secretboard',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv("SB_DB_NAME", "secretboard"),
+        'USER': os.getenv("SB_DB_USER", "secretboard"),
+        'PASSWORD': os.getenv("SB_DB_PASSWORD"),
+        'HOST': os.getenv("SB_DB_HOST", "localhost"),
+        'PORT': os.getenv("SB_DB_PORT"),
     }
 }
 
@@ -125,6 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+STATIC_ROOT = "/static_files/"
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (

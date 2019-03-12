@@ -8,7 +8,8 @@ verify_ssl = true
 [packages]
 django = "*"
 django-el-pagination = "*"
-mysqlclient = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.6"

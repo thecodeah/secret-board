@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: "secretboard"
+      POSTGRES_PASSWORD: ${SB_DB_PASSWORD}
+  
+  web:
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+    command: ../docker/web/wait-for-it.sh -t 5 db:5432 -- sh -c "python manage.py migrate && gunicorn -b 0.0.0.0:8000 -w 4 secretboard.wsgi"
+    environment:
+      SB_SECRET_KEY: ${SB_SECRET_KEY}
+      SB_DB_HOST: db
+      SB_DB_NAME: "secretboard"
+      SB_DB_USER: "secretboard"
+      SB_DB_PASSWORD: ${SB_DB_PASSWORD}
+    volumes:
+      - static_files:/static_files
+    depends_on:
+      - db
+  
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - static_files:/static_files
+    depends_on:
+      - web
+
+volumes:
+  static_files:
