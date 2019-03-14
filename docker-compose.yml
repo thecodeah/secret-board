@@ -39,7 +39,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.frontend.rule=Host:secretboard.org,www.secretboard.org
-      - traefik.frontend.headers.SSLRedirect=true
       - traefik.frontend.headers.SSLHost=www.secretboard.org
       - traefik.frontend.redirect.regex=^https?://secretboard.org/(.*)
       - traefik.frontend.redirect.replacement=https://www.secretboard.org/$${1}
