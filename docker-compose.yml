@@ -1,4 +1,8 @@
-version: '3'
+version: "3.5"
+networks:
+  default:
+    external:
+      name: gateway
 
 services:
   db:
@@ -7,7 +11,7 @@ services:
     environment:
       POSTGRES_USER: "secretboard"
       POSTGRES_PASSWORD: ${SB_DB_PASSWORD}
-  
+
   web:
     image: secretboard/web
     command: ../docker/web/wait-for-it.sh -t 5 db:5432 -- sh -c "python manage.py migrate && gunicorn -b 0.0.0.0:8000 -w 4 secretboard.wsgi"
@@ -24,7 +28,7 @@ services:
       - db
     labels:
       - com.centurylinklabs.watchtower.enable=true
-  
+
   nginx:
     image: secretboard/nginx
     restart: on-failure
