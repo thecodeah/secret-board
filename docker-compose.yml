@@ -28,8 +28,6 @@ services:
   nginx:
     image: secretboard/nginx
     restart: on-failure
-    ports:
-      - "80:80"
     volumes:
       - static_files:/static_files
     depends_on:
