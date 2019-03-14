@@ -3,15 +3,15 @@ version: '3'
 services:
   db:
     image: postgres:alpine
+    restart: on-failure
     environment:
       POSTGRES_USER: "secretboard"
       POSTGRES_PASSWORD: ${SB_DB_PASSWORD}
   
   web:
-    build:
-      context: .
-      dockerfile: docker/web/Dockerfile
+    image: secretboard/web
     command: ../docker/web/wait-for-it.sh -t 5 db:5432 -- sh -c "python manage.py migrate && gunicorn -b 0.0.0.0:8000 -w 4 secretboard.wsgi"
+    restart: on-failure
     environment:
       SB_SECRET_KEY: ${SB_SECRET_KEY}
       SB_DB_HOST: db
@@ -22,17 +22,25 @@ services:
       - static_files:/static_files
     depends_on:
       - db
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
   
   nginx:
-    build:
-      context: .
-      dockerfile: docker/nginx/Dockerfile
+    image: secretboard/nginx
+    restart: on-failure
     ports:
       - "80:80"
     volumes:
       - static_files:/static_files
     depends_on:
       - web
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.frontend.rule=Host:secretboard.org,www.secretboard.org
+      - traefik.frontend.headers.SSLRedirect=true
+      - traefik.frontend.headers.SSLHost=www.secretboard.org
+      - traefik.frontend.redirect.regex=^https?://secretboard.org/(.*)
+      - traefik.frontend.redirect.replacement=https://www.secretboard.org/$${1}
 
 volumes:
   static_files:
