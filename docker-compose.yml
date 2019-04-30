@@ -11,6 +11,8 @@ services:
     environment:
       POSTGRES_USER: "secretboard"
       POSTGRES_PASSWORD: ${SB_DB_PASSWORD}
+    labels:
+      - traefik.enable=true
 
   web:
     image: secretboard/web
@@ -28,6 +30,7 @@ services:
       - db
     labels:
       - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
 
   nginx:
     image: secretboard/nginx
@@ -38,6 +41,7 @@ services:
       - web
     labels:
       - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
       - traefik.frontend.rule=Host:secretboard.org,www.secretboard.org
       - traefik.frontend.headers.SSLHost=www.secretboard.org
       - traefik.frontend.redirect.regex=^https?://secretboard.org/(.*)
