@@ -1,25 +1,43 @@
 version: "3.5"
 
 services:
-  db:
-    image: postgres:alpine
-    environment:
-      POSTGRES_USER: "secretboard"
 
+  # Django and gunicorn
   web:
-    build: ./web
-    command: ./wait-for-it.sh -t 5 db:5432 -- sh -c "python manage.py migrate && gunicorn -b 0.0.0.0:8000 -w 4 secretboard.wsgi"
+    container_name: sb_web
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+    # Wait for database to be ready, then make migrations and start gunicorn.
+    command: wait-for-it -t 5 -s database:5432 -- sh -c "python manage.py migrate && gunicorn -b 0.0.0.0:8000 -w 4 secretboard.wsgi"
+    restart: on-failure
     environment:
-      SB_DB_HOST: db
+      SB_DB_HOST: database
       SB_DB_NAME: "secretboard"
       SB_DB_USER: "secretboard"
+      SB_SECRET_KEY: ${SB_SECRET_KEY}
     volumes:
       - static_files:/static_files
     depends_on:
-      - db
+      - database
 
+  # Postgres Database
+  database:
+      container_name: sb_database
+      image: postgres:alpine
+      restart: on-failure
+      environment:
+        POSTGRES_USER: "secretboard"
+
+  # Nginx web server
   nginx:
-    build: ./nginx
+    container_name: sb_nginx
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    restart: on-failure
+    ports:
+      - "80:80"
     volumes:
       - static_files:/static_files
     depends_on:
@@ -27,3 +45,9 @@ services:
 
 volumes:
   static_files:
+
+# Command to start all services at once
+# docker-compose up
+
+# Commands to enter running containers
+# docker exec -it sb_web bash

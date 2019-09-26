@@ -1,4 +1,5 @@
 django==2.1.7
 django-el-pagination>=3.2.4
 gunicorn==19.9.0
+wait-for-it==1.1.2
 psycopg2-binary

@@ -84,7 +84,7 @@ DATABASES = {
         'USER': os.getenv("SB_DB_USER", "secretboard"),
         'PASSWORD': os.getenv("SB_DB_PASSWORD"),
         'HOST': os.getenv("SB_DB_HOST", "localhost"),
-        'PORT': os.getenv("SB_DB_PORT"),
+        'PORT': os.getenv("SB_DB_PORT", "5432"),
     }
 }
 
