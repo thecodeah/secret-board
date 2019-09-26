@@ -1,4 +1,4 @@
-django==2.1.7
+django==2.1.11
 django-el-pagination>=3.2.4
 gunicorn==19.9.0
 psycopg2-binary
