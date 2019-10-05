@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
     <head>
         <title>SecretBoard</title>
@@ -7,19 +7,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{% static "posts/css/custom.css" %}"/>
         <link rel="shortcut icon" type="image/svg" href="{% static "img/logo.svg" %}"/>
     </head>
 
     <body style="background-color:#EFEFEF">
         <div class="container py-5">
             {% if messages %}
-            {% for message in messages %}
-                {% if message.tags %}
-                <div class="alert alert-{{ message.tags }}" role="alert">
-                    <strong>{{ message.tags|title }}!</strong> {{ message }}
-                </div>
-                {% endif %}
-            {% endfor %}
+                {% for message in messages %}
+                    {% if message.tags %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        <strong>{{ message.tags|title }}!</strong> {{ message }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
             {% endif %}
             {% block content %}{% endblock %}
         </div>

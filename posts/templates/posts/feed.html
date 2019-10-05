@@ -7,9 +7,13 @@
     </script>
     <script>
         csrf_token = "{{ csrf_token }}"
-        post_url = "{% url "posts:like" %}"
+        username = "{{ user.username }}"
+        like_post_url = "{% url "posts:like" %}"
+        comment_post_url = "{% url "posts:comment" %}"
     </script>
     <script type="text/javascript" src="{% static "posts/js/like.js" %}"></script>
+    <script type="text/javascript" src="{% static "posts/js/comment.js" %}"></script>
+    <script type="text/javascript" src="{% static "posts/js/collapsable.js" %}"></script>
 {% endblock %}
 
 {% block content %}

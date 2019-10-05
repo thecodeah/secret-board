@@ -12,7 +12,7 @@ from django.contrib import messages
 
 from el_pagination.views import AjaxListView
 
-from .models import Post, Board
+from .models import Post, Board, Comment
 from .forms import PostForm
 
 class FeedView(AjaxListView):
@@ -72,4 +72,19 @@ def like(request):
         post.likes.add(user)
     
     response = {"like_count": post.likes.count(), "liked": not liked}
+    return HttpResponse(json.dumps(response), content_type = "application/json")
+
+@login_required
+@require_POST
+def comment(request):
+    user = request.user
+    post = get_object_or_404(Post, pk = request.POST["post_id"])
+    content = request.POST["content"]
+
+    if post.comment_set.count() < 20:
+        Comment.objects.create(author = user, content = content, post = post, pub_date = timezone.now())
+    else:
+        return HttpResponse(status = 405)
+
+    response = {"comment_count": post.comment_set.count()}
     return HttpResponse(json.dumps(response), content_type = "application/json")

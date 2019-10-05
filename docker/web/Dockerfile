@@ -11,4 +11,4 @@ COPY . /app
 
 # Set a temporary secret key as it's required to run any manage.py command.
 ARG SB_SECRET_KEY=xxx
-RUN python manage.py collectstatic
+RUN python manage.py collectstatic --noinput --clear

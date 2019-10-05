@@ -3,7 +3,7 @@ $(document).ready(function() {
         $.ajax({
             context: this,
             type: "POST",
-            url: post_url,
+            url: like_post_url,
             data: {
                 "csrfmiddlewaretoken": csrf_token,
                 "post_id": $(this).attr("name").slice(5)

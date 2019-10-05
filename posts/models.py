@@ -17,3 +17,15 @@ class Post(models.Model):
 
     def __str__(self):
         return self.content
+
+class Comment(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, default = 1)
+    content = models.CharField(max_length = 280)
+    post = models.ForeignKey(Post, models.CASCADE)
+    pub_date = models.DateTimeField()
+
+    class Meta():
+        ordering = ['pub_date']
+    
+    def __str__(self):
+        return self.content

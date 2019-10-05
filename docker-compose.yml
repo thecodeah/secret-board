@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: docker/web/Dockerfile
     # Wait for database to be ready, then make migrations and start gunicorn.
-    command: wait-for-it -t 5 -s database:5432 -- sh -c "python manage.py migrate && gunicorn -b 0.0.0.0:8000 -w 4 secretboard.wsgi"
+    command: wait-for-it -t 5 -s database:5432 -- sh -c "python manage.py makemigrations && python manage.py migrate && gunicorn -b 0.0.0.0:8000 -w 4 secretboard.wsgi"
     restart: on-failure
     environment:
       SB_DB_HOST: database

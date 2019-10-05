@@ -8,4 +8,5 @@ urlpatterns = [
     path('b/<slug:slug>/', views.FeedView.as_view(), name = "feed"),
     path('b/<slug:slug>/post', views.post, name = "post"),
     path('like', views.like, name = "like"),
+    path('comment', views.comment, name = "comment"),
 ]
