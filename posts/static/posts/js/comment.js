@@ -1,4 +1,15 @@
 $(document).ready(function() {
+    $(document).on("click", ".js-commentButton", function(e) {
+        var $icon = $(this).children(".fa-comment");
+
+        // Toggle icon solid and light state
+        if($icon.hasClass("far")) {
+            $icon.addClass('fas').removeClass('far');
+        } else {
+            $icon.addClass('far').removeClass('fas');
+        }
+    });
+
     $(document).on("submit", ".js-formComment", function(e){
         e.preventDefault(); // Prevent form to refresh page
 
@@ -27,7 +38,7 @@ $(document).ready(function() {
                 $comment.find("b").text(`${username}:`);
                 $comment.find("span").text(commentstring);
 
-                $comment.insertBefore($(this));
+                $(`#comments-${post_id}`).children(".card-body").append($comment);
 
                 // Empty the comment input box
                 $(this).find(".comment-input").val("");

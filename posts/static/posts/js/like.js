@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $(document).on("click", ".js-actionLike", function(){
+    $(document).on("click", ".js-likeButton", function(){
         $.ajax({
             context: this,
             type: "POST",
@@ -20,10 +20,10 @@ $(document).ready(function() {
                 }
 
                 // Toggle heart color
-                if(heart.hasClass("text-danger")) {
-                    heart.addClass('text-muted').removeClass('text-danger');
+                if(heart.hasClass("text-primary")) {
+                    heart.addClass('text-muted').removeClass('text-primary');
                 } else {
-                    heart.addClass('text-danger').removeClass('text-muted');
+                    heart.addClass('text-primary').removeClass('text-muted');
                 }
 
                 $(this).children(".js-likeCount").text(response.like_count);

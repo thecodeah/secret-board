@@ -1,3 +1,12 @@
+::-webkit-scrollbar {
+    background-color: #3e3e41;
+    width: 0.5vw;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #2d2d2f;
+}
+
 .collapsable:not(.show) {
     display: none;
 }
@@ -17,22 +26,25 @@
 
 .comment-input {
     border: none;
-
+    background: none;
     height: 1.5em;
-    color: #222;
+    color: #bbb;
 }
 
 .comment-input:focus {
     outline: none;
 }
 
+.comment-card-body {
+    background-color: #323235;
+}
+
 .comment-btn {
     height: 1.5em;
     border: none;
-    border-radius: 0.2em;
     padding: 0 0.3em 0 0.3em;
-    background-color: #6c757d;
-    color: white;
+    background-color: #323235;
+    color: #ccc;
 
     opacity: 0;
     transition: opacity 0.3s;

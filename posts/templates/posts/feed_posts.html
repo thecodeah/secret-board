@@ -13,24 +13,26 @@
         <div class="card-footer">
             {% load post_extras %}
             {% post_liked post user.id as liked %}
-            <button name="like-{{ post.id }}" class="js-actionLike post-footer-btn">
-                <i class="{{ liked|yesno:"fas,far" }} fa-heart {{ liked|yesno:"text-danger,text-muted" }} mr-1"></i>
+            <button name="like-{{ post.id }}" class="js-likeButton post-footer-btn">
+                <i class="{{ liked|yesno:"fas,far" }} fa-heart {{ liked|yesno:"text-primary,text-muted" }} mr-1"></i>
                 <span class="js-likeCount text-secondary">{{ post.likes.count }}</span>
             </button>
-            <button name="comment-{{ post.id }}" class="js-exposeCollapsable post-footer-btn" data-collapsable="#comments-{{ post.id }}">
+            <button name="comment-{{ post.id }}" class="js-commentButton js-exposeCollapsable post-footer-btn" data-collapsable="#comments-{{ post.id }}">
                 <i class="far fa-comment text-muted mr-1"></i>
                 <span class="js-commentCount text-secondary">{{ post.comment_set.count }}</span>
             </button>
         </div>
     </div>
 
-    <div id="comments-{{ post.id }}" class="collapsable card my-1">
-        <div class="card-body py-2">
+    <div id="comments-{{ post.id }}" class="collapsable card">
+        <div class="card-body comment-card-body py-2">
             {% for comment in post.comment_set.all %}
                 {% include "posts/comment.html" with comment_author=comment.author.username comment_content=comment.content %}
             {% endfor %}
+        </div>
 
-            {% if post.comment_set.count < 20 %}
+        {% if post.comment_set.count < 20 %}
+        <div class="card-footer py-2">
             <form class="js-formComment" name="commentform-{{ post.id }}">
                 {% csrf_token %}
                 <small class="d-flex flex-row align-items-center">
@@ -40,8 +42,8 @@
                     <input type="submit" class="ml-1 comment-btn" value="Comment"/>
                 </small>
             </form>
-            {% endif %}
         </div>
+        {% endif %}
     </div>
 {% endfor %}
 {% show_more %}
