@@ -1,23 +1,24 @@
 version: "3.5"
 
+# ---
+# Check docker-compose.dev.yml and docker-compose.prod.yml for instructions on
+# how to get the services running...
+# ---
+
 services:
 
-  # Django and gunicorn
+  # Django
   web:
     container_name: sb_web
     build:
       context: .
       dockerfile: docker/web/Dockerfile
-    # Wait for database to be ready, then make migrations and start gunicorn.
-    command: wait-for-it -t 5 -s database:5432 -- sh -c "python manage.py makemigrations && python manage.py migrate && gunicorn -b 0.0.0.0:8000 -w 4 secretboard.wsgi"
     restart: on-failure
     environment:
       SB_DB_HOST: database
       SB_DB_NAME: "secretboard"
       SB_DB_USER: "secretboard"
       SB_SECRET_KEY: ${SB_SECRET_KEY}
-    volumes:
-      - static_files:/static_files
     depends_on:
       - database
 
@@ -28,26 +29,3 @@ services:
       restart: on-failure
       environment:
         POSTGRES_USER: "secretboard"
-
-  # Nginx web server
-  nginx:
-    container_name: sb_nginx
-    build:
-      context: .
-      dockerfile: docker/nginx/Dockerfile
-    restart: on-failure
-    ports:
-      - "80:80"
-    volumes:
-      - static_files:/static_files
-    depends_on:
-      - web
-
-volumes:
-  static_files:
-
-# Command to start all services at once
-# docker-compose up
-
-# Commands to enter running containers
-# docker exec -it sb_web bash

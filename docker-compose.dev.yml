@@ -1,0 +1,19 @@
+version: "3.5"
+
+services:
+
+  # Django
+  web:
+    command: wait-for-it -t 0 -s database:5432 -- sh -c "python manage.py runserver 0.0.0.0:8000"
+    environment:
+      SB_DEBUG: "true"
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app/
+
+# Command to start all services at once (Development only)
+# docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+# Commands to enter running containers
+# docker exec -it sb_web bash

@@ -1,0 +1,33 @@
+version: "3.5"
+
+services:
+
+  # Django and gunicorn
+  web:
+    # Wait for database to be ready, then collect static files, perform migrations and start gunicorn.
+    command: wait-for-it -t 0 -s database:5432 -- sh -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn -b 0.0.0.0:8000 -w 4 secretboard.wsgi"
+    volumes:
+      - static_files:/static_files
+  
+  # Nginx web server
+  nginx:
+    container_name: sb_nginx
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    restart: on-failure
+    ports:
+      - "80:80"
+    volumes:
+      - static_files:/static_files
+    depends_on:
+      - web
+
+volumes:
+  static_files:
+
+# Command to start all services at once (Production)
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+# Commands to enter running containers
+# docker exec -it sb_web bash
