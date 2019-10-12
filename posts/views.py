@@ -14,6 +14,7 @@ from el_pagination.views import AjaxListView
 
 from .models import Post, Board, Comment
 from .forms import PostForm
+from .utils import update_popularity
 
 class FeedView(AjaxListView):
     model = Post
@@ -27,6 +28,8 @@ class FeedView(AjaxListView):
         if "slug" in kwargs:
             self.board = get_object_or_404(Board, slug = self.kwargs["slug"])
 
+        update_popularity()
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -36,10 +39,10 @@ class FeedView(AjaxListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(approved = True).order_by("-pub_date")
+        queryset = queryset.filter(hidden = False).order_by("-popularity")
 
         if self.board is not None:
-            queryset = queryset.filter(board = self.board).order_by("-pub_date")
+            queryset = queryset.filter(board = self.board).order_by("-popularity")
 
         return queryset
 
@@ -54,8 +57,6 @@ def post(request, slug):
         post.board = board
         post.pub_date = timezone.now()
         post.save()
-
-        messages.add_message(request, messages.SUCCESS, "Your secret has been posted and is awaiting approval!")
 
     return HttpResponseRedirect(reverse("posts:feed", args = (slug,)))
 
