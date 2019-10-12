@@ -25,11 +25,11 @@
     </div>
 
     <div id="comments-{{ post.id }}" class="collapsable card">
-        <div class="card-body comment-card-body py-2">
+        <div class="card-body comment-card-body py-2">{% spaceless %}
             {% for comment in post.comment_set.all %}
                 {% include "posts/comment.html" with comment_author=comment.author.username comment_content=comment.content %}
             {% endfor %}
-        </div>
+        {% endspaceless %}</div>
 
         {% if post.comment_set.count < 20 %}
         <div class="card-footer py-2">
