@@ -11,6 +11,12 @@
     display: none;
 }
 
+.boards-list {
+    padding: 0 2em;
+    margin: 0;
+    list-style: square;
+}
+
 .post-footer-btn {
     background: none;
     border: none;

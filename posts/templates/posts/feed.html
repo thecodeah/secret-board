@@ -20,12 +20,15 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="card mb-3">
-                    <div class="card-header">Boards</div>
+                    <div class="card-header">
+                        <i class="fas fa-bars mr-2"></i>
+                        <span>Boards</span>
+                    </div>
                     <div class="card-body">
-                        <ul>
-                            <a href="{% url "posts:main_feed" %}"><li>#main</li></a>
+                        <ul class="boards-list">
+                            <a href="{% url "posts:main_feed" %}"><li>main</li></a>
                             {% for b in board_list %}
-                            <a href="{% url "posts:feed" b %}"><li>#{{ b }}</li></a>
+                            <a href="{% url "posts:feed" b %}"><li>{{ b }}</li></a>
                             {% endfor %}
                         </ul>
                     </div>
