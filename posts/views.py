@@ -13,7 +13,7 @@ from django.contrib import messages
 from el_pagination.views import AjaxListView
 
 from .models import Post, Board, Comment
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 from .utils import update_popularity
 
 class FeedView(AjaxListView):
@@ -78,14 +78,17 @@ def like(request):
 @login_required
 @require_POST
 def comment(request):
-    user = request.user
     post = get_object_or_404(Post, pk = request.POST["post_id"])
-    content = request.POST["content"]
-
+    
     if post.comment_set.count() < 20:
-        Comment.objects.create(author = user, content = content, post = post, pub_date = timezone.now())
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit = False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+        
+        response = {"comment_count": post.comment_set.count()}
+        return HttpResponse(json.dumps(response), content_type = "application/json")
     else:
         return HttpResponse(status = 405)
-
-    response = {"comment_count": post.comment_set.count()}
-    return HttpResponse(json.dumps(response), content_type = "application/json")

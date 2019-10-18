@@ -23,7 +23,7 @@ class Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, default = 1)
     content = models.CharField(max_length = 280)
     post = models.ForeignKey(Post, models.CASCADE)
-    pub_date = models.DateTimeField()
+    pub_date = models.DateTimeField(auto_now_add = True)
 
     class Meta():
         ordering = ['pub_date']
