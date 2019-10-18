@@ -33,7 +33,7 @@
 
         {% if post.comment_set.count < 20 %}
         <div class="card-footer py-2">
-            <form class="js-formComment" name="commentform-{{ post.id }}">
+            <form class="js-formComment" name="commentform-{{ post.id }}" autocomplete="off">
                 {% csrf_token %}
                 <small class="d-flex flex-row align-items-center">
                     <i class="far fa-comments text-secondary mr-2"></i>
