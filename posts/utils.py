@@ -1,4 +1,5 @@
 import random
+import math
 
 from django.utils import timezone
 
@@ -28,30 +29,29 @@ def generate_username():
 
 # Loops over each post on the website and updates it's popularity points.
 def update_popularity():
+    WEEK = (60 * 60 * 12 * 7) # The amount of seconds in a week.
     for post in Post.objects.all():
-        post_age = (timezone.now() - post.pub_date)
+        post.popularity = 0
 
-        # Get a set of UNIQUE commenters.
+        post_age = (timezone.now() - post.pub_date)
+        post_age = post_age.total_seconds()
+
+        # The base for popularity points - Time in seconds up to a week.
+        if(post_age < WEEK):
+            post.popularity = WEEK - post_age
+
+        # Bonus points - Interaction
+        ## Get a set of UNIQUE commenters.
         commenters = set()
         for comment in post.comment_set.all():
             commenters.add(comment.author)
 
-        # The base for popularity points.
-        # Likes + Unique comments - age in days.
-        post.popularity = (post.likes.count() + len(commenters)) - post_age.days
+        post.popularity += len(commenters) * (60 * 60)
+        post.popularity += post.likes.count() * (60 * 30)
 
-        # Bonus points for new posts
-        if post_age.seconds <= 10:
-            post.popularity += 100
-        if post_age.seconds <= (5 * 60):
-            post.popularity += 1
-        if post_age.seconds <= (30 * 60):
-            post.popularity += 1
-        if post_age.days < 1:
-            post.popularity += 3
-        if post_age.days <= 7:
-            # Posts that are older than a week will have a hard time competing
-            # with the new posts.
-            post.popularity += 50
+        # Limit the popularity so that old posts can't get above new posts due
+        # to bonuses.
+        if post.popularity > WEEK:
+            post.popularity = WEEK
         
         post.save()
