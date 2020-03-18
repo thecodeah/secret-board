@@ -6,7 +6,7 @@ networks:
 
 services:
   db:
-    image: postgres:alpine
+    image: postgres:11-alpine
     restart: on-failure
     environment:
       POSTGRES_USER: "secretboard"
