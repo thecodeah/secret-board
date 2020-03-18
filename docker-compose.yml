@@ -40,12 +40,12 @@ services:
     depends_on:
       - web
     labels:
-      - com.centurylinklabs.watchtower.enable=true
-      - traefik.enable=true
-      - traefik.frontend.rule=Host:secretboard.org,www.secretboard.org
-      - traefik.frontend.headers.SSLHost=www.secretboard.org
-      - traefik.frontend.redirect.regex=^https?://secretboard.org/(.*)
-      - traefik.frontend.redirect.replacement=https://www.secretboard.org/$${1}
+      com.centurylinklabs.watchtower.enable: true
+      traefik.enable: true
+      traefik.docker.network: gateway
+      traefik.http.routers.prometheus.rule: Host(`secretboard.org`)
+      traefik.http.routers.prometheus.entrypoints: https
+      traefik.http.routers.prometheus.tls.certresolver: default
 
 volumes:
   static_files:
