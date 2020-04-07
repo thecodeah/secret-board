@@ -8,7 +8,7 @@ Once you enter the website an anonymous user account is automatically generated 
 You can post secrets on a variety of boards such as #random, #work or #dating. You can also interact with posts by liking them.
 
 ## Screenshot
-![secretboard-screenshot](https://user-images.githubusercontent.com/21268739/54408822-86db6300-46f4-11e9-9899-72262dbb5b53.png)
+![secretboard-screenshot](https://user-images.githubusercontent.com/21268739/78712486-ebc5b480-7918-11ea-86f9-8ff880176376.png)
 
 ## Setting up your own instance of SecretBoard
 
